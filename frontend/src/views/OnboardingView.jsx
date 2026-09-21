@@ -12,7 +12,7 @@ import {
   GENDERS,
   HORMONAL_PHASES,
   MEALS,
-  SHOPPING_DAYS,
+  SHOPPING_FREQUENCIES,
   persistProfile,
 } from "../lib/profileStore";
 
@@ -105,7 +105,7 @@ export default function OnboardingView({ onFinish }) {
     routine: {
       eyebrow: "Your routine",
       title: "Time and",
-      accent: "groceries",
+      accent: "shopping",
       subtitle: "So we match recipes to the minutes you actually have.",
     },
   }[current];
@@ -240,11 +240,14 @@ export default function OnboardingView({ onFinish }) {
               />
             </Section>
 
-            <Section label="Grocery shopping day">
+            <Section
+              label="Grocery rhythm"
+              hint="How often do you usually shop for food?"
+            >
               <ChipGroup
-                options={SHOPPING_DAYS}
-                selected={[profile.schedule.shopping_day]}
-                onSelect={(value) => patchSchedule({ shopping_day: value })}
+                options={SHOPPING_FREQUENCIES}
+                selected={[profile.schedule.shopping_frequency]}
+                onSelect={(value) => patchSchedule({ shopping_frequency: value })}
               />
             </Section>
           </div>

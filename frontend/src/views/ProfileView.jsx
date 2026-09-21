@@ -14,7 +14,7 @@ import {
   loadProfile,
   MEALS,
   persistProfile,
-  SHOPPING_DAYS,
+  SHOPPING_FREQUENCIES,
 } from "../lib/profileStore";
 import ViewShell from "./ViewShell";
 
@@ -149,11 +149,11 @@ export default function ProfileView({ profile: appProfile, onProfileChange, onRe
             />
           </Field>
 
-          <Field label="Grocery day">
+          <Field label="Grocery rhythm">
             <ChipGroup
-              options={SHOPPING_DAYS}
-              selected={[profile.schedule.shopping_day]}
-              onSelect={(value) => patchSchedule({ shopping_day: value })}
+              options={SHOPPING_FREQUENCIES}
+              selected={[profile.schedule.shopping_frequency]}
+              onSelect={(value) => patchSchedule({ shopping_frequency: value })}
             />
           </Field>
         </GlassCard>

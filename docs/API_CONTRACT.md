@@ -51,7 +51,7 @@ Si cambias un esquema aqui, avisa al otro dev inmediatamente.
   "schedule": {
     "cooking_time_minutes": 25,
     "meals_per_day": ["breakfast", "lunch", "dinner"],
-    "shopping_day": "Saturday"
+    "shopping_frequency": "Weekly"
   }
 }
 ```
@@ -65,7 +65,7 @@ Si cambias un esquema aqui, avisa al otro dev inmediatamente.
 | `allergies` | string[] | `Nuts`, `Gluten`, `Lactose`, `Shellfish`, `Egg`, `Soy`, `Fish`. Nunca deben aparecer en una receta. |
 | `schedule.cooking_time_minutes` | number | Minutos disponibles para cocinar. |
 | `schedule.meals_per_day` | string[] | En minusculas: `breakfast`, `lunch`, `dinner`, `snacks`. |
-| `schedule.shopping_day` | string | `Monday`..`Sunday` o `Every day`. |
+| `schedule.shopping_frequency` | string | `Every 5 days` \| `Weekly` \| `Every 2 weeks` \| `Monthly` \| `Custom`. |
 
 > El cliente guarda su perfil en `localStorage` para que cada dispositivo tenga el
 > suyo durante la demo. `PUT /api/profile` se sigue usando para que Gemini disponga

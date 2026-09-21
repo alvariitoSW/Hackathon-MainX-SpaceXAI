@@ -30,6 +30,7 @@ tocar codigo o acabaremos con conflictos de merge.
 ### Dev B - Lista, Perfil y Onboarding
 - [x] Vista Perfil: leer el perfil de `profileStore`, editarlo y guardarlo
 - [x] Boton "Redo onboarding" en Perfil usando `clearProfile()`
+- [x] Onboarding/Profile: usar frecuencia flexible de compra (`shopping_frequency`) en vez de dia fijo
 - [ ] Vista Lista de la compra consumiendo `POST /api/shopping-list`
 - [ ] Poder marcar ingredientes como comprados
 
@@ -93,6 +94,8 @@ _(nada ahora mismo)_
 - Endpoints nuevos van en tu router de `backend/routers/`, nunca en `main.py`.
 - Perfil: la fuente de verdad para cada juez/dispositivo es `localStorage` (`smartfridge.profile`).
   El backend mantiene un solo `profile.json`, solo como sincronizacion para Gemini y fallback.
+- Schedule: usamos `shopping_frequency`, no `shopping_day`. Valores visibles: `Every 5 days`,
+  `Weekly`, `Every 2 weeks`, `Monthly`, `Custom`.
 - Recetas: `generateRecipes(mealType)` adjunta automaticamente el perfil local; el backend lo
   usa antes que `profile.json`, asi las recetas respetan el onboarding del usuario actual.
 - Idioma: todo el texto visible va en ingles, incluidos los datos mock y los valores del contrato.
