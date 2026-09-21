@@ -1,0 +1,67 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-bark text-bark antialiased;
+    font-family: theme("fontFamily.sans");
+  }
+}
+
+@layer components {
+  /* Cristal esmerilado estilo iOS. El saturate es lo que hace que los colores
+     del fondo se "filtren" a traves del cristal en vez de verse grises. */
+  .glass {
+    @apply border border-white/25 bg-white/15 shadow-lg shadow-black/10;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+
+  .glass-solid {
+    @apply border border-white/60 bg-white/80 shadow-lg shadow-black/5;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+
+  /* Brillo especular en el borde superior, como el Liquid Glass de iOS. */
+  .glass-specular {
+    position: relative;
+  }
+  .glass-specular::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.7),
+      rgba(255, 255, 255, 0) 40%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Sombra de texto para mantener legibilidad sobre las fotos de fondo. */
+  .text-shadow-soft {
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-solid {
+    @apply bg-cream;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

@@ -1,0 +1,36 @@
+# Hackathon Smart Fridge — reglas del proyecto
+
+## Protocolo obligatorio antes de CADA interaccion
+
+1. Lee `STATE.md` (hito actual y reparto Dev A / Dev B).
+2. Lee `docs/OWNERSHIP.md` y trabaja SOLO en tus archivos asignados.
+3. Lee `docs/API_CONTRACT.md` antes de tocar endpoints o llamadas HTTP.
+4. Si escribes JSX, lee `docs/DESIGN_SYSTEM.md` (tokens, cristal, componentes).
+5. Lee `docs/PROJECT_CONTEXT.md` si necesitas contexto de producto.
+6. Al terminar un hito, actualiza `STATE.md` (solo tus tarjetas).
+
+## Reparto
+
+- **Dev A:** Nevera + Recetas + `backend/routers/{inventory,receipt,recipes}.py` + Gemini en escaner/recetas.
+- **Dev B:** Lista + Perfil + Onboarding + `backend/routers/{profile,shopping}.py` + enganchar onboarding en `App.jsx`.
+
+Mapa completo: `docs/OWNERSHIP.md`.
+
+## Stack (no negociable)
+
+- Monorepo: `frontend/` + `backend/`.
+- Frontend: React + Vite, Tailwind, shadcn/ui, lucide-react, axios. Solo `.jsx`/`.js`.
+- Backend: FastAPI + Uvicorn + Pydantic. Persistencia JSON en `backend/data/`.
+- IA: Gemini `gemini-1.5-flash` con try/except y fallback mock.
+
+## Prohibido
+
+- Bases de datos, ORMs, auth, Docker, Redux/Zustand, React Router, TypeScript.
+- Endpoints nuevos en `backend/main.py` (usa tu router en `backend/routers/`).
+- Dependencias nuevas sin permiso del usuario.
+
+## Demo
+
+- Escanner: boton oculto Demo/Bypass con JSON mock sin Gemini.
+- Backend `:8000`, frontend `:5173`. Vite proxea `/api` — rutas relativas en `services/api.js`.
+- Movil: `docs/DEMO_MOVIL.md`.
