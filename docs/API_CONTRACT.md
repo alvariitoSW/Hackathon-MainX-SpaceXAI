@@ -203,10 +203,19 @@ Cruza inventario (priorizando lo que caduca antes) con el perfil y devuelve **2 
 **Body**
 
 ```json
-{ "meal_type": "dinner" }
+{
+  "meal_type": "dinner",
+  "profile": {
+    "...": "Profile from localStorage, optional but recommended"
+  }
+}
 ```
 
 `meal_type`: `"breakfast"` | `"lunch"` | `"dinner"`.
+
+`profile` es opcional por compatibilidad, pero el frontend debe enviarlo desde
+`localStorage` siempre que exista. Asi las recetas usan el onboarding del dispositivo
+actual y no dependen del ultimo `PUT /api/profile` hecho por otro juez.
 
 **Respuesta `200`**
 

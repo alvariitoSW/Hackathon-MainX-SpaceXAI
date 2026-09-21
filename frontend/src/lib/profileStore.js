@@ -67,6 +67,17 @@ export const EMPTY_PROFILE = {
   },
 };
 
+export function createEmptyProfile() {
+  return {
+    ...EMPTY_PROFILE,
+    allergies: [...EMPTY_PROFILE.allergies],
+    schedule: {
+      ...EMPTY_PROFILE.schedule,
+      meals_per_day: [...EMPTY_PROFILE.schedule.meals_per_day],
+    },
+  };
+}
+
 export function loadProfile() {
   try {
     const raw = localStorage.getItem(KEY);

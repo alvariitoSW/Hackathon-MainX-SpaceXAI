@@ -4,6 +4,7 @@ import axios from "axios";
 // backend (ver vite.config.js), asi la app funciona igual desde el portatil,
 // desde el movil por IP o a traves de un tunel HTTPS, sin tocar nada.
 export const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+const PROFILE_STORAGE_KEY = "smartfridge.profile";
 
 const client = axios.create({
   baseURL: API_BASE_URL,
@@ -39,10 +40,20 @@ export async function scanReceipt(file) {
   return data;
 }
 
+function readDeviceProfile() {
+  try {
+    const raw = localStorage.getItem(PROFILE_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
 // POST /api/recipes/generate -> { success, source, meal_type, recipes }
-export async function generateRecipes(mealType) {
+export async function generateRecipes(mealType, profile = readDeviceProfile()) {
   const { data } = await client.post("/api/recipes/generate", {
     meal_type: mealType,
+    profile,
   });
   return data;
 }

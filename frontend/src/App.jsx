@@ -48,6 +48,12 @@ export default function App() {
     );
   }
 
+  function resetOnboarding() {
+    clearProfile();
+    setProfile(null);
+    setActiveView("fridge");
+  }
+
   return (
     // pb-28 deja hueco para la barra flotante, que es mas alta que una nav pegada al borde.
     <div className="max-w-md mx-auto min-h-screen bg-slate-50 flex flex-col pb-28 relative overflow-hidden">
@@ -72,7 +78,13 @@ export default function App() {
         {activeView === "fridge" && <FridgeView />}
         {activeView === "recipes" && <RecipesView />}
         {activeView === "shopping" && <ShoppingListView />}
-        {activeView === "profile" && <ProfileView />}
+        {activeView === "profile" && (
+          <ProfileView
+            profile={profile}
+            onProfileChange={setProfile}
+            onResetOnboarding={resetOnboarding}
+          />
+        )}
       </main>
 
       <BottomNav activeView={activeView} onChange={setActiveView} />

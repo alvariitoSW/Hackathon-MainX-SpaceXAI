@@ -7,6 +7,8 @@ dentro de un try/except, con fallback a gemini_service.MOCK_RECIPES y source="mo
 Prioriza en el prompt los alimentos que caducan antes y respeta las alergias del perfil.
 """
 
+from typing import Any, Dict, Optional
+
 from pydantic import BaseModel
 from fastapi import APIRouter
 
@@ -22,13 +24,20 @@ last_generated = []
 
 class RecipeRequest(BaseModel):
     meal_type: str = "dinner"
+    profile: Optional[Dict[str, Any]] = None
 
 
 @router.post("/generate")
 def generate(payload: RecipeRequest):
     global last_generated
 
-    profile = database.get_profile()
+    # The backend has a single profile.json, but each demo device keeps its own
+    # profile in localStorage. Prefer the profile sent by the frontend so recipes
+    # always use the onboarding from that device.
+    profile = payload.profile or database.get_profile()
+    if payload.profile:
+        database.save_profile(payload.profile)
+
     inventory = database.get_inventory()
 
     try:

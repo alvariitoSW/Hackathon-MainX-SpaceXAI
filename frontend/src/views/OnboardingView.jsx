@@ -7,8 +7,8 @@ import { cn } from "../lib/utils";
 import {
   ALLERGENS,
   COOKING_TIMES,
+  createEmptyProfile,
   DIETS,
-  EMPTY_PROFILE,
   GENDERS,
   HORMONAL_PHASES,
   MEALS,
@@ -20,7 +20,7 @@ const STEPS = ["name", "you", "diet", "allergies", "routine"];
 
 export default function OnboardingView({ onFinish }) {
   const [step, setStep] = useState(0);
-  const [profile, setProfile] = useState(EMPTY_PROFILE);
+  const [profile, setProfile] = useState(createEmptyProfile);
   const [saving, setSaving] = useState(false);
 
   const current = STEPS[step];
