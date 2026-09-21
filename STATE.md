@@ -1,4 +1,4 @@
-﻿# STATE - Tablero Kanban del Hackathon
+# STATE - Tablero Kanban del Hackathon
 
 > Regla: este archivo se actualiza al terminar cada hito. Mueve tu tarjeta de columna y
 > marca la casilla. Antes de empezar, lee este archivo para saber en que anda el otro dev.
@@ -21,8 +21,8 @@ tocar codigo o acabaremos con conflictos de merge.
 - [ ] Poder consumir o tirar un alimento (`DELETE /api/inventory/{id}`, ya existe en backend)
 
 ### Dev A - Recetas
-- [ ] Vista Recetas: boton "What do I eat today?" + selector de tipo de comida
-- [ ] Tarjetas de receta (tiempo, dificultad, ingredientes, pasos, nota nutricional)
+- [x] Vista Recetas: alerta preventiva, dashboard, selector de tiempo, craving input y recomendaciones mock
+- [x] Tarjetas de receta mock (tiempo, etiquetas, boton "Cook this" y pasos expandibles)
 - [ ] Integrar Gemini en `generate_recipes()` priorizando lo que caduca antes
 - [ ] Respetar alergias y dieta del perfil en el prompt
 - [ ] Enviar el perfil local al llamar `generateRecipes(mealType)`; el cliente ya lo adjunta automaticamente desde `localStorage`
