@@ -31,8 +31,8 @@ tocar codigo o acabaremos con conflictos de merge.
 - [x] Vista Perfil: leer el perfil de `profileStore`, editarlo y guardarlo
 - [x] Boton "Redo onboarding" en Perfil usando `clearProfile()`
 - [x] Onboarding/Profile: usar frecuencia flexible de compra (`shopping_frequency`) en vez de dia fijo
-- [ ] Vista Lista de la compra consumiendo `POST /api/shopping-list`
-- [ ] Poder marcar ingredientes como comprados
+- [x] Vista Lista de la compra consumiendo `POST /api/shopping-list` con fallback demo
+- [x] Poder marcar ingredientes como comprados en memoria durante la sesion
 
 ### Conjunto
 - [ ] Manifest PWA + iconos
