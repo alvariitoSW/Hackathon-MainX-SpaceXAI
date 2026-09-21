@@ -13,6 +13,11 @@ Este repo es un hackathon de 4 h: PWA mobile-first de nevera inteligente (ticket
 | [docs/PROJECT_CONTEXT.md](docs/PROJECT_CONTEXT.md) | Pitch y happy path |
 | [docs/DEMO_MOVIL.md](docs/DEMO_MOVIL.md) | Demo desde el movil (HTTPS) |
 
+## Idioma
+
+Todo el texto que ve el usuario va en **ingles** (UI, mensajes de error, datos mock y
+valores del contrato). El codigo, los comentarios y esta documentacion, en castellano.
+
 ## Arranque
 
 ```powershell

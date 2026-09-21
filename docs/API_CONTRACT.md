@@ -7,6 +7,8 @@ Si cambias un esquema aqui, avisa al otro dev inmediatamente.
 - **Prefijo:** todos los endpoints cuelgan de `/api`
 - **Formato:** JSON (`application/json`), salvo el escaner que usa `multipart/form-data`
 - **Fechas:** siempre `YYYY-MM-DD` (string ISO)
+- **Idioma:** TODOS los valores de datos van en **ingles**, porque se pintan tal cual en
+  la UI. Nombres de alimentos, categorias, titulos y pasos de receta: ingles siempre.
 
 ---
 
@@ -17,9 +19,9 @@ Si cambias un esquema aqui, avisa al otro dev inmediatamente.
 ```json
 {
   "id": "itm_001",
-  "name": "Huevos camperos",
-  "quantity": "12 uds",
-  "category": "Proteina",
+  "name": "Free-range eggs",
+  "quantity": "12 units",
+  "category": "Protein",
   "is_perishable": true,
   "expiration_date": "2026-10-02"
 }
@@ -28,48 +30,69 @@ Si cambias un esquema aqui, avisa al otro dev inmediatamente.
 | Campo | Tipo | Notas |
 | --- | --- | --- |
 | `id` | string | Unico. Generado por el backend (`itm_XXX`). |
-| `name` | string | Nombre legible del alimento. |
-| `quantity` | string | Texto libre: `"12 uds"`, `"250 g"`, `"1 L"`. |
-| `category` | string | `Proteina` \| `Verdura` \| `Fruta` \| `Lacteo` \| `Cereal` \| `Legumbre` \| `Despensa` \| `Otro`. |
+| `name` | string | Nombre del alimento, en ingles. |
+| `quantity` | string | Texto libre: `"12 units"`, `"250 g"`, `"1 L"`. |
+| `category` | string | `Protein` \| `Vegetable` \| `Fruit` \| `Dairy` \| `Grain` \| `Legume` \| `Pantry` \| `Other`. |
 | `is_perishable` | boolean | Si es `false`, `expiration_date` puede ser `null`. |
 | `expiration_date` | string \| null | `YYYY-MM-DD`. |
+
+> Las categorias tienen emoji asociado en `frontend/src/lib/freshness.js`. Si inventas
+> una categoria fuera de la lista, saldra el emoji generico.
 
 ### `Profile`
 
 ```json
 {
   "name": "Laura",
-  "gender": "Femenino",
-  "hormonal_phase": "Fase lutea (requiere magnesio)",
-  "diet_type": "Mediterranea",
-  "allergies": ["Frutos secos"],
+  "gender": "Woman",
+  "hormonal_phase": "Luteal",
+  "diet_type": "Mediterranean",
+  "allergies": ["Nuts"],
   "schedule": {
     "cooking_time_minutes": 25,
-    "meals_per_day": ["desayuno", "comida", "cena"]
+    "meals_per_day": ["breakfast", "lunch", "dinner"],
+    "shopping_day": "Saturday"
   }
 }
 ```
+
+| Campo | Tipo | Notas |
+| --- | --- | --- |
+| `name` | string | Requerido. El onboarding pone `"Chef"` si se omite. |
+| `gender` | string | `Woman` \| `Man` \| `Prefer not to say`. |
+| `hormonal_phase` | string | `Menstrual` \| `Follicular` \| `Ovulation` \| `Luteal` \| `Not sure`. Vacio si `gender` no es `Woman`. |
+| `diet_type` | string | `Omnivore` \| `Mediterranean` \| `Vegetarian` \| `Vegan` \| `Keto` \| `Gluten-free`. |
+| `allergies` | string[] | `Nuts`, `Gluten`, `Lactose`, `Shellfish`, `Egg`, `Soy`, `Fish`. Nunca deben aparecer en una receta. |
+| `schedule.cooking_time_minutes` | number | Minutos disponibles para cocinar. |
+| `schedule.meals_per_day` | string[] | En minusculas: `breakfast`, `lunch`, `dinner`, `snacks`. |
+| `schedule.shopping_day` | string | `Monday`..`Sunday` o `Every day`. |
+
+> El cliente guarda su perfil en `localStorage` para que cada dispositivo tenga el
+> suyo durante la demo. `PUT /api/profile` se sigue usando para que Gemini disponga
+> del perfil al generar recetas.
 
 ### `Recipe`
 
 ```json
 {
   "id": "rcp_001",
-  "title": "Tortilla de espinacas y queso feta",
-  "description": "Rapida, rica en hierro y magnesio, ideal para fase lutea.",
+  "title": "Spinach and feta omelette",
+  "description": "Fast, rich in iron and magnesium, ideal for the luteal phase.",
   "cooking_time_minutes": 15,
-  "difficulty": "Facil",
-  "uses_expiring_items": ["Espinacas frescas"],
-  "ingredients_available": ["Huevos camperos", "Espinacas frescas"],
-  "ingredients_missing": ["Queso feta"],
+  "difficulty": "Easy",
+  "uses_expiring_items": ["Fresh spinach"],
+  "ingredients_available": ["Free-range eggs", "Fresh spinach"],
+  "ingredients_missing": ["Feta cheese"],
   "steps": [
-    "Saltea las espinacas 3 minutos.",
-    "Bate los huevos y anade el feta.",
-    "Cuaja la tortilla 5 minutos por cada lado."
+    "Saute the spinach for 3 minutes.",
+    "Beat the eggs and fold in the feta.",
+    "Cook the omelette for 5 minutes per side."
   ],
-  "nutrition_note": "Aporta magnesio y hierro, utiles en fase lutea."
+  "nutrition_note": "Provides magnesium and iron, useful during the luteal phase."
 }
 ```
+
+`difficulty`: `Easy` | `Medium` | `Hard`.
 
 ---
 
@@ -84,9 +107,9 @@ Devuelve el estado actual de la nevera.
   "items": [
     {
       "id": "itm_001",
-      "name": "Huevos camperos",
-      "quantity": "12 uds",
-      "category": "Proteina",
+      "name": "Free-range eggs",
+      "quantity": "12 units",
+      "category": "Protein",
       "is_perishable": true,
       "expiration_date": "2026-10-02"
     }
@@ -94,6 +117,20 @@ Devuelve el estado actual de la nevera.
   "total_items": 1
 }
 ```
+
+---
+
+## `DELETE /api/inventory/{item_id}`
+
+Consume o tira un alimento.
+
+**Respuesta `200`**
+
+```json
+{ "success": true, "total_items": 1 }
+```
+
+`404` si el `item_id` no existe.
 
 ---
 
@@ -141,9 +178,9 @@ Recibe la foto de un ticket, extrae los alimentos con Gemini Vision y los anade 
   "items_added": [
     {
       "id": "itm_003",
-      "name": "Yogur griego",
-      "quantity": "4 uds",
-      "category": "Lacteo",
+      "name": "Greek yogurt",
+      "quantity": "4 units",
+      "category": "Dairy",
       "is_perishable": true,
       "expiration_date": "2026-10-05"
     }
@@ -166,10 +203,10 @@ Cruza inventario (priorizando lo que caduca antes) con el perfil y devuelve **2 
 **Body**
 
 ```json
-{ "meal_type": "cena" }
+{ "meal_type": "dinner" }
 ```
 
-`meal_type`: `"desayuno"` | `"comida"` | `"cena"`.
+`meal_type`: `"breakfast"` | `"lunch"` | `"dinner"`.
 
 **Respuesta `200`**
 
@@ -177,7 +214,7 @@ Cruza inventario (priorizando lo que caduca antes) con el perfil y devuelve **2 
 {
   "success": true,
   "source": "gemini",
-  "meal_type": "cena",
+  "meal_type": "dinner",
   "recipes": [
     { "...": "Recipe 1" },
     { "...": "Recipe 2" }
@@ -207,7 +244,7 @@ Si `recipe_ids` viene vacio o ausente, el backend usa las ultimas recetas genera
 {
   "success": true,
   "items": [
-    { "name": "Queso feta", "quantity": "200 g", "category": "Lacteo" }
+    { "name": "Feta cheese", "quantity": "200 g", "category": "Dairy" }
   ],
   "total_items": 1
 }
@@ -223,6 +260,6 @@ Formato comun para cualquier fallo.
 
 ```json
 {
-  "detail": "Mensaje legible para el usuario"
+  "detail": "Readable message, in English (it reaches the UI)"
 }
 ```

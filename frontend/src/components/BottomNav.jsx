@@ -2,10 +2,10 @@ import { Refrigerator, ChefHat, ShoppingCart, User } from "lucide-react";
 import { cn } from "../lib/utils";
 
 const TABS = [
-  { id: "fridge", label: "Nevera", icon: Refrigerator },
-  { id: "recipes", label: "Recetas", icon: ChefHat },
-  { id: "shopping", label: "Lista", icon: ShoppingCart },
-  { id: "profile", label: "Perfil", icon: User },
+  { id: "fridge", label: "Fridge", icon: Refrigerator },
+  { id: "recipes", label: "Recipes", icon: ChefHat },
+  { id: "shopping", label: "List", icon: ShoppingCart },
+  { id: "profile", label: "Profile", icon: User },
 ];
 
 export default function BottomNav({ activeView, onChange }) {

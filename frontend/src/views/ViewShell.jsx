@@ -1,7 +1,7 @@
 import GlassCard from "../components/ui/GlassCard";
 
-// Cabecera compartida por las vistas. El titular mezcla sans y serif italica,
-// que es lo que le da el aire editorial a la referencia de diseno.
+// Shared view header. The headline mixes sans with a serif italic accent, which
+// is what gives the reference design its editorial feel.
 export default function ViewShell({ eyebrow, title, accent, children }) {
   return (
     <div className="px-5 pb-8 pt-16">

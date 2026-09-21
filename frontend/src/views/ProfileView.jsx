@@ -1,11 +1,11 @@
 import ViewShell, { Placeholder } from "./ViewShell";
 
-// Hito: "Vista Perfil" en STATE.md
-// Formulario de dieta, alergias, tiempo de cocina y fase hormonal -> updateProfile(profile).
+// Milestone: "Profile view" in STATE.md
+// Diet, allergies, cooking time and cycle phase form -> persistProfile(profile).
 export default function ProfileView() {
   return (
-    <ViewShell eyebrow="Tu perfil" title="Comer como" accent="tú quieres">
-      <Placeholder>Perfil pendiente de implementar.</Placeholder>
+    <ViewShell eyebrow="Your profile" title="Eat the way" accent="you want">
+      <Placeholder>Profile not implemented yet.</Placeholder>
     </ViewShell>
   );
 }

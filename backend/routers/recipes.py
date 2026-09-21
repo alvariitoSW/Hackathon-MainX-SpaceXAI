@@ -21,7 +21,7 @@ last_generated = []
 
 
 class RecipeRequest(BaseModel):
-    meal_type: str = "cena"
+    meal_type: str = "dinner"
 
 
 @router.post("/generate")

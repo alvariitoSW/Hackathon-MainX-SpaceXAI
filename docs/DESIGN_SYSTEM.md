@@ -90,9 +90,9 @@ Ya aplica `rounded-3xl` y el brillo especular. Acepta `as` para cambiar la etiqu
 ```jsx
 import PillButton from "../components/ui/PillButton";
 
-<PillButton onClick={fn}>Escanear ticket</PillButton>
-<PillButton variant="accent">Generar recetas</PillButton>
-<PillButton variant="ghost">Omitir</PillButton>
+<PillButton onClick={fn}>Scan receipt</PillButton>
+<PillButton variant="accent">Generate recipes</PillButton>
+<PillButton variant="ghost">Skip</PillButton>
 ```
 
 Variantes: `primary` (blanco, por defecto), `accent` (naranja `clay`), `ghost` (cristal).
@@ -114,7 +114,7 @@ Cabecera compartida de las pantallas secundarias. Te ahorra repetir el titular.
 ```jsx
 import ViewShell, { Placeholder } from "./ViewShell";
 
-<ViewShell eyebrow="Hoy toca" title="¿Qué como" accent="hoy?">
+<ViewShell eyebrow="Today" title="What do I" accent="eat today?">
   {/* tu contenido */}
 </ViewShell>
 ```
@@ -129,7 +129,10 @@ En `frontend/src/lib/freshness.js`. No la reimplementes.
 | `freshnessOf(item)` | `{ level, days, label, dot, text }` con las clases de color ya resueltas |
 | `sortByUrgency(items)` | Los que caducan antes, primero |
 | `emojiFor(categoria)` | Emoji del alimento según su categoría |
-| `categoryLabel(categoria)` | Nombre de categoría con acentos para mostrar |
+| `categoryLabel(categoria)` | Nombre de categoría listo para mostrar |
+
+Las etiquetas que devuelve (`Expired`, `Today`, `Tomorrow`, `3 days`, `Pantry`) ya
+vienen en inglés. No las traduzcas al pintarlas.
 
 Los alimentos se muestran **siempre ordenados por urgencia**. Es el argumento
 anti-desperdicio del pitch y tiene que verse sin explicarlo.
@@ -147,6 +150,8 @@ durante la demo.
 
 ## Reglas
 
+- **Todo el texto visible va en inglés.** Copys, labels, placeholders, `aria-label`,
+  mensajes de error y datos mock. El código y los comentarios siguen en castellano.
 - Todo vive dentro del contenedor `max-w-md mx-auto` de `App.jsx`. No lo toques.
 - No añadas dependencias de UI nuevas sin preguntar. El cristal es CSS puro a propósito.
 - Nada de `bg-white` sólido a pantalla completa: taparía el fondo y rompería la estética.

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ScanLine, TriangleAlert } from "lucide-react";
 import { getInventory } from "../services/api";
 import { freshnessOf, sortByUrgency, emojiFor, categoryLabel } from "../lib/freshness";
+import { loadProfile } from "../lib/profileStore";
 import GlassCard from "../components/ui/GlassCard";
 import PillButton from "../components/ui/PillButton";
 import FreshnessBadge from "../components/ui/FreshnessBadge";
@@ -11,10 +12,12 @@ export default function FridgeView() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const name = loadProfile()?.name || "Chef";
+
   useEffect(() => {
     getInventory()
       .then((data) => setItems(sortByUrgency(data.items || [])))
-      .catch(() => setError("No se pudo cargar la nevera."))
+      .catch(() => setError("Couldn't load your fridge."))
       .finally(() => setLoading(false));
   }, []);
 
@@ -27,12 +30,12 @@ export default function FridgeView() {
     <div className="px-5 pb-8 pt-16">
       <header className="animate-fade-up">
         <p className="text-sm font-medium uppercase tracking-[0.2em] text-white/60">
-          Hola, Laura
+          Hi, {name}
         </p>
         <h1 className="mt-2 text-[40px] leading-[1.05] font-semibold tracking-tight text-white text-shadow-soft">
-          Tu nevera,
+          Your fridge,
           <br />
-          <span className="font-serif italic font-normal">tu chef</span>
+          <span className="font-serif italic font-normal">your chef</span>
         </h1>
       </header>
 
@@ -40,9 +43,9 @@ export default function FridgeView() {
         className="mt-6 flex items-center gap-4 p-4 animate-fade-up"
         style={{ animationDelay: "80ms" }}
       >
-        <Stat value={items.length} label="alimentos" />
+        <Stat value={items.length} label="items" />
         <div className="h-9 w-px bg-white/25" />
-        <Stat value={expiringSoon.length} label="por caducar" highlight />
+        <Stat value={expiringSoon.length} label="expiring soon" highlight />
       </GlassCard>
 
       {expiringSoon.length > 0 && (
@@ -52,15 +55,15 @@ export default function FridgeView() {
         >
           <TriangleAlert size={18} className="shrink-0 text-soon" />
           <p className="text-[13px] leading-snug text-white/90">
-            Cocina pronto <strong className="font-semibold">{expiringSoon[0].name}</strong> para
-            no tirarlo.
+            Cook <strong className="font-semibold">{expiringSoon[0].name}</strong> soon so it
+            doesn't go to waste.
           </p>
         </GlassCard>
       )}
 
       <section className="mt-7">
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
-          En la nevera
+          In your fridge
         </h2>
 
         {loading && <SkeletonList />}
@@ -82,7 +85,7 @@ export default function FridgeView() {
       <div className="mt-7 animate-fade-up" style={{ animationDelay: "320ms" }}>
         <PillButton className="flex items-center justify-center gap-2">
           <ScanLine size={18} />
-          Escanear ticket
+          Scan receipt
         </PillButton>
       </div>
     </div>

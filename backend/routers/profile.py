@@ -15,7 +15,9 @@ router = APIRouter(prefix="/api/profile", tags=["profile"])
 
 class Schedule(BaseModel):
     cooking_time_minutes: int = 25
-    meals_per_day: List[str] = ["desayuno", "comida", "cena"]
+    meals_per_day: List[str] = ["breakfast", "lunch", "dinner"]
+    # Usual grocery shopping day, captured during onboarding.
+    shopping_day: str = "Saturday"
 
 
 class Profile(BaseModel):

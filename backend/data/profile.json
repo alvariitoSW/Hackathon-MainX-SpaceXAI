@@ -1,17 +1,15 @@
 {
-  "name": "Laura",
-  "gender": "Femenino",
-  "hormonal_phase": "Fase lútea (requiere magnesio)",
-  "diet_type": "Mediterránea",
-  "allergies": [
-    "Frutos secos"
-  ],
+  "name": "Alvaro",
+  "gender": "Man",
+  "hormonal_phase": "",
+  "diet_type": "Keto",
+  "allergies": [],
   "schedule": {
     "cooking_time_minutes": 25,
     "meals_per_day": [
-      "desayuno",
-      "comida",
-      "cena"
-    ]
+      "lunch",
+      "dinner"
+    ],
+    "shopping_day": "Sunday"
   }
 }

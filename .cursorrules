@@ -16,6 +16,15 @@
 
 Mapa completo: `docs/OWNERSHIP.md`.
 
+## Idioma (no negociable)
+
+- **Todo lo que ve el usuario va en INGLES**: copys, labels, placeholders, `aria-label`,
+  mensajes de error, y los datos mock de `backend/data/` y `gemini_service.py`.
+- Los valores del contrato (categorias, `meal_type`, dieta, alergenos) son en ingles.
+  Enums exactos en `docs/API_CONTRACT.md`.
+- Los prompts a Gemini deben pedir explicitamente respuesta en ingles.
+- El codigo, los comentarios y estos docs siguen en castellano.
+
 ## Stack (no negociable)
 
 - Monorepo: `frontend/` + `backend/`.

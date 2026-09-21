@@ -39,6 +39,6 @@ def build_list(payload: ShoppingRequest):
             if key in seen or key in in_fridge:
                 continue
             seen.add(key)
-            items.append({"name": name, "quantity": "", "category": "Otro"})
+            items.append({"name": name, "quantity": "", "category": "Other"})
 
     return {"success": True, "items": items, "total_items": len(items)}
