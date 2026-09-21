@@ -5,6 +5,7 @@ import RecipeCard from "../components/recipes/RecipeCard";
 import GlassCard from "../components/ui/GlassCard";
 import PillButton from "../components/ui/PillButton";
 import { cn } from "../lib/utils";
+import { generateRecipes } from "../services/api";
 import ViewShell from "./ViewShell";
 
 const TIME_OPTIONS = ["15 min", "30 min", "1 hour+"];
@@ -85,28 +86,44 @@ export default function RecipesView() {
   const [craving, setCraving] = useState("");
   const [aiState, setAiState] = useState("idle");
   const [feedback, setFeedback] = useState("");
+  const [generatedRecipe, setGeneratedRecipe] = useState(null);
   const [cookingId, setCookingId] = useState(null);
   const [openRecipeId, setOpenRecipeId] = useState(null);
 
-  function generateFromCraving() {
+  async function generateFromCraving() {
+    const normalized = craving.trim();
+    if (!normalized) {
+      setAiState("feedback");
+      setFeedback("Tell me what you are craving first.");
+      setGeneratedRecipe(null);
+      return;
+    }
+
     setAiState("loading");
     setFeedback("");
+    setGeneratedRecipe(null);
 
-    window.setTimeout(() => {
-      const normalized = craving.trim().toLowerCase();
-      if (!normalized) {
-        setFeedback("Tell me what you are craving first.");
-      } else if (normalized.includes("burger") || normalized.includes("pizza")) {
-        setFeedback(
-          "Gemini would adapt that craving: red meat is close to your weekly limit, so try a chicken or veggie version."
-        );
-      } else {
-        setFeedback(
-          `Gemini found a ${selectedTime} path for "${craving.trim()}" using your fridge first.`
-        );
+    try {
+      const response = await generateRecipes("dinner", {
+        craving: normalized,
+        cookingTimeMinutes: minutesFromTime(selectedTime),
+      });
+      const recipe = response.recipes?.[0];
+
+      if (!recipe) {
+        throw new Error("Empty recipe response");
       }
+
+      setGeneratedRecipe(recipe);
+      setFeedback(
+        recipe.ai_feedback ||
+          `Gemini built a ${selectedTime} recipe for "${normalized}" using your profile and fridge.`
+      );
       setAiState("feedback");
-    }, 900);
+    } catch {
+      setFeedback("Gemini could not answer right now. Try again or use a smart recommendation.");
+      setAiState("feedback");
+    }
   }
 
   function cookRecipe(recipeId) {
@@ -133,6 +150,8 @@ export default function RecipesView() {
           feedback={feedback}
           onGenerate={generateFromCraving}
         />
+
+        {generatedRecipe && <GeneratedRecipe recipe={generatedRecipe} />}
 
         <section>
           <div className="mb-3 flex items-center justify-between">
@@ -310,4 +329,76 @@ function CravingInput({ craving, onCravingChange, aiState, feedback, onGenerate 
       </PillButton>
     </GlassCard>
   );
+}
+
+function GeneratedRecipe({ recipe }) {
+  return (
+    <GlassCard className="p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
+            Gemini answer
+          </p>
+          <h2 className="mt-2 text-[22px] font-semibold leading-tight text-white">
+            {recipe.title}
+          </h2>
+          <p className="mt-2 text-[13px] leading-relaxed text-white/70">
+            {recipe.description}
+          </p>
+        </div>
+        <span className="rounded-full bg-white px-3 py-1 text-[12px] font-semibold text-bark">
+          {recipe.cooking_time_minutes} min
+        </span>
+      </div>
+
+      <RecipeBullets
+        title="You already have"
+        items={recipe.ingredients_available}
+        empty="No matching fridge items."
+      />
+      <RecipeBullets
+        title="You need"
+        items={recipe.ingredients_missing}
+        empty="No structural ingredients missing."
+      />
+      <RecipeBullets title="Steps" items={recipe.steps} numbered />
+
+      {recipe.nutrition_note && (
+        <div className="mt-4 rounded-3xl bg-white/10 p-3 ring-1 ring-white/10">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
+            Nutrition note
+          </p>
+          <p className="mt-1 text-[13px] leading-relaxed text-white/75">
+            {recipe.nutrition_note}
+          </p>
+        </div>
+      )}
+    </GlassCard>
+  );
+}
+
+function RecipeBullets({ title, items = [], empty, numbered }) {
+  const safeItems = items?.length ? items : empty ? [empty] : [];
+
+  return (
+    <div className="mt-4">
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
+        {title}
+      </p>
+      <ul className="mt-2 space-y-1.5 text-[13px] leading-relaxed text-white/75">
+        {safeItems.map((item, index) => (
+          <li key={`${title}-${item}`} className="flex gap-2">
+            <span className="font-semibold text-white/90">{numbered ? `${index + 1}.` : "-"}</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function minutesFromTime(time) {
+  if (time === "15 min") return 15;
+  if (time === "30 min") return 30;
+  return 60;
 }

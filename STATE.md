@@ -23,9 +23,9 @@ tocar codigo o acabaremos con conflictos de merge.
 ### Dev A - Recetas
 - [x] Vista Recetas: alerta preventiva, dashboard, selector de tiempo, craving input y recomendaciones mock
 - [x] Tarjetas de receta mock (tiempo, etiquetas, boton "Cook this" y pasos expandibles)
-- [ ] Integrar Gemini en `generate_recipes()` priorizando lo que caduca antes
-- [ ] Respetar alergias y dieta del perfil en el prompt
-- [ ] Enviar el perfil local al llamar `generateRecipes(mealType)`; el cliente ya lo adjunta automaticamente desde `localStorage`
+- [x] Integrar Gemini en `generate_recipes()` para craving input con fallback mock
+- [x] Respetar alergias, dieta, inventario y tiempo disponible en el prompt
+- [x] Enviar el perfil local al llamar `generateRecipes(mealType, options)`; el cliente ya lo adjunta automaticamente desde `localStorage`
 
 ### Dev B - Lista, Perfil y Onboarding
 - [x] Vista Perfil: leer el perfil de `profileStore`, editarlo y guardarlo
@@ -89,14 +89,14 @@ _(nada ahora mismo)_
 - Puertos: backend `8000`, frontend `5173`. Vite proxea `/api` al backend, asi que en el
   frontend se llama a rutas relativas (`/api/...`), nunca a `http://localhost:8000`.
 - Para probar desde el movil, ver `docs/DEMO_MOVIL.md` (tunel HTTPS con cloudflared).
-- La clave de Gemini va en `backend/.env` como `GEMINI_API_KEY`. Nunca se commitea.
+- La clave de Gemini va en `.env` o `backend/.env` como `GEMINI_API_KEY` o `GOOGLE_API_KEY`. Nunca se commitea.
 - Si cambias un esquema JSON, actualiza `docs/API_CONTRACT.md` y avisa por chat.
 - Endpoints nuevos van en tu router de `backend/routers/`, nunca en `main.py`.
 - Perfil: la fuente de verdad para cada juez/dispositivo es `localStorage` (`smartfridge.profile`).
   El backend mantiene un solo `profile.json`, solo como sincronizacion para Gemini y fallback.
 - Schedule: usamos `shopping_frequency`, no `shopping_day`. Valores visibles: `Every 5 days`,
   `Weekly`, `Every 2 weeks`, `Monthly`, `Custom`.
-- Recetas: `generateRecipes(mealType)` adjunta automaticamente el perfil local; el backend lo
+- Recetas: `generateRecipes(mealType, { craving, cookingTimeMinutes })` adjunta automaticamente el perfil local; el backend lo
   usa antes que `profile.json`, asi las recetas respetan el onboarding del usuario actual.
 - Idioma: todo el texto visible va en ingles, incluidos los datos mock y los valores del contrato.
   Codigo y comentarios, en castellano. Los prompts a Gemini tienen que pedir respuesta en ingles.

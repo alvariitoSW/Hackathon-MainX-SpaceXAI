@@ -50,10 +50,13 @@ function readDeviceProfile() {
 }
 
 // POST /api/recipes/generate -> { success, source, meal_type, recipes }
-export async function generateRecipes(mealType, profile = readDeviceProfile()) {
+export async function generateRecipes(mealType, options = {}) {
+  const profile = options.profile || readDeviceProfile();
   const { data } = await client.post("/api/recipes/generate", {
     meal_type: mealType,
     profile,
+    craving: options.craving || "",
+    cooking_time_minutes: options.cookingTimeMinutes,
   });
   return data;
 }

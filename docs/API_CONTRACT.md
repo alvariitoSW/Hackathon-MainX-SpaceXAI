@@ -205,6 +205,8 @@ Cruza inventario (priorizando lo que caduca antes) con el perfil y devuelve **2 
 ```json
 {
   "meal_type": "dinner",
+  "craving": "creamy pasta",
+  "cooking_time_minutes": 30,
   "profile": {
     "...": "Profile from localStorage, optional but recommended"
   }
@@ -212,6 +214,8 @@ Cruza inventario (priorizando lo que caduca antes) con el perfil y devuelve **2 
 ```
 
 `meal_type`: `"breakfast"` | `"lunch"` | `"dinner"`.
+`craving`: texto libre del usuario. Opcional, pero la UI de Recetas lo envia desde el input.
+`cooking_time_minutes`: minutos disponibles hoy. Opcional.
 
 `profile` es opcional por compatibilidad, pero el frontend debe enviarlo desde
 `localStorage` siempre que exista. Asi las recetas usan el onboarding del dispositivo

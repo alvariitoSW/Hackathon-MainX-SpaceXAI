@@ -25,6 +25,8 @@ last_generated = []
 class RecipeRequest(BaseModel):
     meal_type: str = "dinner"
     profile: Optional[Dict[str, Any]] = None
+    craving: str = ""
+    cooking_time_minutes: Optional[int] = None
 
 
 @router.post("/generate")
@@ -41,10 +43,19 @@ def generate(payload: RecipeRequest):
     inventory = database.get_inventory()
 
     try:
-        recipes = gemini_service.generate_recipes(profile, inventory, payload.meal_type)
+        recipes = gemini_service.generate_recipes(
+            profile,
+            inventory,
+            payload.meal_type,
+            craving=payload.craving,
+            cooking_time_minutes=payload.cooking_time_minutes,
+        )
         source = "gemini"
     except Exception:
-        recipes = gemini_service.MOCK_RECIPES
+        recipes = gemini_service.mock_craving_recipes(
+            payload.craving,
+            payload.cooking_time_minutes,
+        )
         source = "mock"
 
     last_generated = recipes
